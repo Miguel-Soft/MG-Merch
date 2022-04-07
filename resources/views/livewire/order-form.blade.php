@@ -69,6 +69,7 @@
                                                 <span class="border border-gray-300 text-gray-900 text-sm p-2.5 cursor-pointer" wire:click="inputButtonHandler({{$product['productData']['id']}}, '+1')">+</span>
                                             </div>
                                         @else
+                                            <input type="checkbox" wire:model="productOrder.{{ $product['productData']['id'] }}.total">
                                         @endif
 
                                     </div>

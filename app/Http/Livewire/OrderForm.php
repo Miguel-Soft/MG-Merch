@@ -21,7 +21,7 @@ class OrderForm extends Component{
     public $productOrder = [];
     public $total = 0;
     public $paymentNotice = 'BBQMG-Voornaam';
-    public $iban = "BE000000000";
+    public $iban = "BE95 0635 4437 6058";
 
     /* button handler */
     public function inputButtonHandler($productOrderId, $type){
@@ -82,7 +82,13 @@ class OrderForm extends Component{
         $this->total = 0;
 
         foreach($this->productOrder as $orderItem){
-            $this->total += ($orderItem['productData']['price'] * $orderItem['total']);
+            if($orderItem['productData']['multiple']){
+                $this->total += ($orderItem['productData']['price'] * $orderItem['total']);
+            }else{
+                if($orderItem['total']){
+                    $this->total += $orderItem['productData']['price'];
+                }
+            }
         }
 
         return true;
@@ -107,13 +113,24 @@ class OrderForm extends Component{
             $order->save();
 
             foreach($this->productOrder as $orderItem){
-                if($orderItem['total'] !== 0){
-                    $orderProduct = new Order_product([
-                        'order_id' => $order->id,
-                        'product_id' => $orderItem['productData']['id'],
-                        'total' => $orderItem['total']
-                    ]);
-                    $orderProduct->save();
+                if($orderItem['productData']['multiple']){
+                    if($orderItem['total'] !== 0){
+                        $orderProduct = new Order_product([
+                            'order_id' => $order->id,
+                            'product_id' => $orderItem['productData']['id'],
+                            'total' => $orderItem['total']
+                        ]);
+                        $orderProduct->save();
+                    }
+                }else{
+                    if($orderItem['total']){
+                        $orderProduct = new Order_product([
+                            'order_id' => $order->id,
+                            'product_id' => $orderItem['productData']['id'],
+                            'total' => 1
+                        ]);
+                        $orderProduct->save();
+                    }
                 }
             }
 
@@ -129,10 +146,17 @@ class OrderForm extends Component{
         $products = Product::all();
 
         foreach($products as $product){
-            $this->productOrder[$product->id] = [
-                'productData' => $product,
-                'total' => 0
-            ];
+            if($product->multiple){
+                $this->productOrder[$product->id] = [
+                    'productData' => $product,
+                    'total' => 0
+                ];
+            }else{
+                $this->productOrder[$product->id] = [
+                    'productData' => $product,
+                    'total' => false
+                ];
+            }
         }
     }
 
