@@ -108,3 +108,8 @@ body {
 .button:hover{
   cursor: pointer;
 }
+
+.copy{
+  font-weight: 800;
+  padding: 2px 5px;
+}

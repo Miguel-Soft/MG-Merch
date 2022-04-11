@@ -20,7 +20,7 @@ class OrderForm extends Component{
     public $bbq = false;
     public $productOrder = [];
     public $total = 0;
-    public $paymentNotice = 'BBQMG-Voornaam';
+    public $paymentNotice = 'LUSTRUM-MG OrderID Voornaam';
     public $iban = "BE95 0635 4437 6058";
 
     /* button handler */
@@ -134,7 +134,7 @@ class OrderForm extends Component{
                 }
             }
 
-            $this->paymentNotice = 'BBQMG-'.$order->id.'-'.$this->voorNaam;
+            $this->paymentNotice = 'LUSTRUM-MG '.$order->id.' '.$this->voorNaam;
 
             return true;
         }

@@ -34,10 +34,16 @@
                             <input wire:model="telefoon" type="telefoon" id="text" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
                         </div>
 
-                        <div class="flex items-center mb-4">
+                        <label for="toggle-example" class="flex relative items-center mb-4 cursor-pointer">
+                            <input type="checkbox" id="toggle-example" class="sr-only" wire:model="bbq">
+                            <div class="w-11 h-6 bg-gray-200 rounded-full border border-gray-200 toggle-bg dark:bg-gray-700 dark:border-gray-600"></div>
+                            <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Ik wens deel te nemen aan de BBQ</span>
+                        </label>
+
+                        {{-- <div class="flex items-center mb-4">
                             <input wire:model="bbq" id="bbq" aria-describedby="bbq" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500">
                             <label for="bbq" class="ml-3 text-sm font-medium text-gray-900">Ik wens deel te nemen aan de BBQ</label>
-                        </div>
+                        </div> --}}
             
                     </div>
 
@@ -70,7 +76,15 @@
                                                     <span class="border border-gray-300 text-gray-900 text-sm p-2.5 cursor-pointer" wire:click="inputButtonHandler({{$product['productData']['id']}}, '+1')">+</span>
                                                 </div>
                                             @else
-                                                <input type="checkbox" wire:model="productOrder.{{ $product['productData']['id'] }}.total">
+                                                {{-- <input type="checkbox" wire:model="productOrder.{{ $product['productData']['id'] }}.total"> --}}
+                                                <div class="p-4 flex justify-end">
+                                                    <label for="toggle-example" class="flex relative cursor-pointer">
+                                                        <input wire:model="productOrder.{{ $product['productData']['id'] }}.total" type="checkbox" id="toggle-example" class="sr-only">
+                                                        <div class="w-11 h-6 bg-gray-200 rounded-full border border-gray-200 toggle-bg"></div>
+                                                    </label>
+                                                </div>
+                                                
+
                                             @endif
 
                                         </div>
@@ -91,13 +105,68 @@
 
                     
 
+
+                    <div class="relative overflow-x-auto sm:rounded-lg">
+                        <table class="w-full text-sm text-left text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Naam
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        aantal
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-right">
+                                        Price
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach ($productOrder as $product)
+
+                                    @if($product['total'] !== 0)
+
+                                        <tr class="bg-white border-b">
+                                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                {{ $product['productData']['name'] }}
+                                            </th>
+                                            <td class="px-6 py-4">
+                                                {{ $product['total'] }}
+                                            </td>
+                                            <td class="px-6 py-4 text-right">
+                                                € {{ $product['productData']['price'] * $product['total']}}
+                                            </td>
+                                        </tr>
+
+                                    @endif
+                                @endforeach
+
+                                <tr class="bg-white border-b">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                    </th>
+                                    <td class="px-6 py-4">
+                                    </td>
+                                    <td class="px-6 py-4 text-right text-neutral-900">
+                                        <b>Totaal: € {{ $total }}</b>
+                                    </td>
+                                </tr>
+                                
+                               
+                            </tbody>
+                        </table>
+                    </div>
+
                     @break
 
                 @case(3)
 
                     <h3 class="font-bold mb-5 text-xl">Bestelling ontvangen!</h3>
 
-                    <p>Uw bestelling is succesvol geregistreerd!<br/>Om uw bestelling te bevestigen: stort <b>€{{ $total }}</b> naar <b>{{ $iban }}</b> met mededeling: <b>{{ $paymentNotice }}</b></p>
+                    <p>Uw bestelling is succesvol geregistreerd!<br/>Om uw bestelling te bevestigen: stort <b>€{{ $total }}</b> naar <span class="copy bg-blue-100 cursor-pointer" onclick="navigator.clipboard.writeText('{{ $iban }}')">{{ $iban }}</span> met mededeling: <span class="copy bg-blue-100 cursor-pointer" onclick="navigator.clipboard.writeText('{{ $paymentNotice }}')">{{ $paymentNotice }}</span></p>
+
+
+                    
 
                     @break
                 
