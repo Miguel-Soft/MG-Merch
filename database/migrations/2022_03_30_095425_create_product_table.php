@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('info');
             $table->double('price', 4, 2);
             $table->boolean('multiple');
+            $table->boolean('show');
+            $table->integer('startval')->default('0');
 
             $table->timestamps();
         });

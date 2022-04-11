@@ -149,15 +149,30 @@ class OrderForm extends Component{
             if($product->multiple){
                 $this->productOrder[$product->id] = [
                     'productData' => $product,
-                    'total' => 0
+                    'total' => $product->startval
                 ];
             }else{
                 $this->productOrder[$product->id] = [
                     'productData' => $product,
-                    'total' => false
+                    'total' => $product->startval
                 ];
             }
         }
+
+        // voeg ticket toe
+
+        // $this->productOrder[count($this->productOrder)] = [
+        //     'productData' => [
+        //         "name" => "VVK Lustrum event",
+        //         "info" => "Voorverkoop ticket voor het lustrum",
+        //         "price" => 10.0,
+        //         "multiple" => 0,
+        //         "show" => false
+        //     ],
+        //     'total'  => 1,
+        // ];
+
+
     }
 
     public function render(){

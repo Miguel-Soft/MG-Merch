@@ -52,30 +52,32 @@
             
                         @foreach ($productOrder as $product)
 
-                            <h2 class="mt-2">
-                                <div class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-gray-200">
-                                    <div class="grow-0">
-                                        <span class="text-xl font-bold tracking-tight text-gray-900 block">{{ $product['productData']['name'] }}</span>
-                                        <span class="text-l font-bold tracking-tight text-blue-700 block">€ {{ $product['productData']['price'] }}</span>
+                            @if ($product['productData']['show'])
+                                <h2 class="mt-2">
+                                    <div class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-gray-200">
+                                        <div class="grow-0">
+                                            <span class="text-xl font-bold tracking-tight text-gray-900 block">{{ $product['productData']['name'] }}</span>
+                                            <span class="text-l font-bold tracking-tight text-blue-700 block">€ {{ $product['productData']['price'] }}</span>
+                                        </div>
+
+                                        <div class="grow">
+                                            <!-- input -->
+
+                                            @if ($product['productData']['multiple'])
+                                                <div class="flex p-4 justify-end input-button">
+                                                    <span class="border border-gray-300 text-gray-900 text-sm p-2.5 cursor-pointer" wire:click="inputButtonHandler({{$product['productData']['id']}}, '-1')">-</span>
+                                                    <input type="number" min="0" wire:model="productOrder.{{ $product['productData']['id'] }}.total" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm p-2.5 w-14 inline-block align-middle pointer-events-none" required>
+                                                    <span class="border border-gray-300 text-gray-900 text-sm p-2.5 cursor-pointer" wire:click="inputButtonHandler({{$product['productData']['id']}}, '+1')">+</span>
+                                                </div>
+                                            @else
+                                                <input type="checkbox" wire:model="productOrder.{{ $product['productData']['id'] }}.total">
+                                            @endif
+
+                                        </div>
+                                        <svg class="w-6 h-6 grow-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                     </div>
-
-                                    <div class="grow">
-                                        <!-- input -->
-
-                                        @if ($product['productData']['multiple'])
-                                            <div class="flex p-4 justify-end input-button">
-                                                <span class="border border-gray-300 text-gray-900 text-sm p-2.5 cursor-pointer" wire:click="inputButtonHandler({{$product['productData']['id']}}, '-1')">-</span>
-                                                <input type="number" min="0" wire:model="productOrder.{{ $product['productData']['id'] }}.total" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm p-2.5 w-14 inline-block align-middle pointer-events-none" required>
-                                                <span class="border border-gray-300 text-gray-900 text-sm p-2.5 cursor-pointer" wire:click="inputButtonHandler({{$product['productData']['id']}}, '+1')">+</span>
-                                            </div>
-                                        @else
-                                            <input type="checkbox" wire:model="productOrder.{{ $product['productData']['id'] }}.total">
-                                        @endif
-
-                                    </div>
-                                    <svg class="w-6 h-6 grow-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                </div>
-                            </h2>
+                                </h2>
+                            @endif
             
                         @endforeach
             
