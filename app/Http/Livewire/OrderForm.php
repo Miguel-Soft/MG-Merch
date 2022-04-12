@@ -18,7 +18,7 @@ class OrderForm extends Component{
     public $telefoon;
 
 
-    public $page = 2;
+    public $page = 0;
     public $bbq = false;
     public $productOrder = [];
     public $total = 0;
