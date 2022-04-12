@@ -132,7 +132,7 @@
                                         aantal
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-right">
-                                        Price
+                                        Prijs
                                     </th>
                                 </tr>
                             </thead>
@@ -157,7 +157,7 @@
                                     @endif
                                 @endforeach
 
-                                <tr class="bg-white border-b">
+                                {{-- <tr class="bg-white border-b">
                                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                     </th>
                                     <td class="px-6 py-4">
@@ -165,18 +165,69 @@
                                     <td class="px-6 py-4 text-right text-neutral-900">
                                         <b>Totaal: € {{ $total }}</b>
                                     </td>
-                                </tr>
+                                </tr> --}}
                                 
                                
                             </tbody>
                         </table>
 
-                        {{-- <div class="block grid grid-cols-1 mt-3">
-                            <div class="mb-6">
-                                <label for="reduction" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Korting code</label>
-                                <input wire:model="reduction" type="text" id="reduction" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <div class="block grid grid-cols-1 mt-8">
+
+                            <label for="website-admin" class="block mb-2 text-sm font-medium">Korting code</label>
+                            <div class="flex">
+                                <input wire:model="reductionField" type="text" id="website-admin" class="rounded-none rounded-l-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5">
+                                <span class="cursor-pointer inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 rounded-r-md border border-r-0 border-gray-300" wire:click="processReduction">
+                                    Voeg toe
+                                </span>
                             </div>
-                        </div> --}}
+                            @error('reductionField')
+                                <span class="text-xs text-red-500 mt-1">{{ $message }}</span>
+                            @enderror
+
+                            @if($reductions)
+
+                                <table class="w-full text-sm text-left text-gray-500 mt-6">
+                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                        <tr>
+                                            <th scope="col" class="px-6 py-3">
+                                                Naam
+                                            </th>
+                                            <th scope="col" class="px-6 py-3">
+                                                Code
+                                            </th>
+                                            <th scope="col" class="px-6 py-3 text-right">
+                                                Korting
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+        
+                                        @foreach ($reductions as $reduction)
+                                            <tr class="bg-white border-b">
+                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                    {{ $reduction['name'] }}
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    {{ $reduction['code'] }}
+                                                </td>
+                                                <td class="px-6 py-4 text-right">
+                                                    € -{{ $reduction['price'] }}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        
+                                    
+                                    </tbody>
+                                </table>
+
+                            @endif
+
+                        </div>
+
+                        <div class="mt-8 flex justify-between">
+                            <div></div>
+                            <span class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-4 py-1.5 rounded"><b>Totaal: € {{ $total }}</b></span>
+                        </div>
 
                     </div>
 
@@ -186,9 +237,17 @@
 
                     <h3 class="font-bold mb-5 text-xl">Bestelling ontvangen!</h3>
 
-                    <p>Uw bestelling is succesvol geregistreerd!<br/>Om uw bestelling te bevestigen: stort <b>€{{ $total }}</b> naar <span class="copy bg-blue-100 cursor-pointer" onclick="navigator.clipboard.writeText('{{ $iban }}')">{{ $iban }}</span> met mededeling: <span class="copy bg-blue-100 cursor-pointer" onclick="navigator.clipboard.writeText('{{ $paymentNotice }}')">{{ $paymentNotice }}</span></p>
+                    @if ($total == 0)
+                        <p>Uw bestelling is succesvol geregistreerd en bevestigd!</p>
+                    @else
+                        <p>Uw bestelling is succesvol geregistreerd!<br/>Om uw bestelling te bevestigen: stort <b>€{{ $total }}</b> naar <span class="copy bg-blue-100 cursor-pointer" onclick="navigator.clipboard.writeText('{{ $iban }}')">{{ $iban }}</span> met mededeling: <span class="copy bg-blue-100 cursor-pointer" onclick="navigator.clipboard.writeText('{{ $paymentNotice }}')">{{ $paymentNotice }}</span></p>
 
+                        <div class="p-4 mt-4 text-sm text-blue-700 bg-blue-100 rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
+                            <span class="font-bold">Opgelet!</span> Bestellingen moeten betaald zijn tegen <b>21 april 2022</b>. Indien we geen betaling hebben ontvangen word de bestelling niet bevestigd.
+                        </div>
+                    @endif
 
+                    
                     
 
                     @break

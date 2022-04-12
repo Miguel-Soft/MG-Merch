@@ -3,7 +3,9 @@
 namespace App\Http\Livewire;
 
 use App\Models\Order;
+use App\Models\Reduction;
 use App\Models\Order_product;
+use App\Models\Order_reduction;
 use App\Models\Product;
 use Livewire\Component;
 
@@ -16,13 +18,14 @@ class OrderForm extends Component{
     public $telefoon;
 
 
-    public $page = 0;
+    public $page = 2;
     public $bbq = false;
     public $productOrder = [];
     public $total = 0;
     public $paymentNotice = 'LUSTRUM-MG OrderID Voornaam';
     public $iban = "BE95 0635 4437 6058";
 
+    public $reductionField;
     public $reductions = [];
 
     // validation
@@ -77,6 +80,7 @@ class OrderForm extends Component{
                             $this->page = 2;
                         }
                     }
+                    $this->resetValidation();
                 }else{
                     $this->addError('email', 'email_exist');
                 }
@@ -87,17 +91,21 @@ class OrderForm extends Component{
             case 1:
                 if($this->calculateOrder()){
                     $this->page ++;
+                    $this->resetValidation();
                 }
                 break;
             case 2:
                 if($this->processOrder()){
                     $this->page ++;
+                    $this->resetValidation();
                 }
                 break;
             case 3:
+                $this->resetValidation();
                 break;
             default:
                 $this->page ++;
+                $this->resetValidation();
             break;
         }
     }
@@ -119,10 +127,64 @@ class OrderForm extends Component{
         }
     }
 
+    /* Kortingen */
+    function processReduction(){
+        if($this->reductionField){
+            $reduction = Reduction::where('code',$this->reductionField)->first();
+
+            // check als de korting nog bestaat
+            if($reduction){
+
+                // check als de korting al ingegeven is
+                foreach($this->reductions as $checkReduction){
+                    if($checkReduction['code'] == $this->reductionField){
+                        $this->addError('reductionField', 'Deze kortingscode is al geactiveerd');
+                        return false;
+                    }
+                }
+
+                // check als de korting actief/nog beschikbaar is
+                if($reduction->active > 0){
+
+                    array_push($this->reductions, [
+                        'id' => $reduction->id,
+                        'name' => $reduction->name,
+                        'code' => $reduction->code,
+                        'price' => $reduction->price
+                    ]);
+
+                    // verminder korting met 1 van DB als korting niet oneindig is
+                    if(!$reduction->infinite){
+                        $reduction->active -= 1;
+                    }
+
+                    $reduction->save();
+
+                    $this->calculateOrder();
+                    $this->resetValidation();
+
+                    return true;
+
+                }else{
+                    $this->addError('reductionField', 'Deze kortingscode is niet meer geldig');
+                    return false;
+                }
+            }else{
+                $this->addError('reductionField', 'Deze kortingscode bestaat niet');
+                return false;
+            }
+        }else{
+            $this->addError('reductionField', 'Geef een kortingscode in');
+            return false;
+        }
+    }
+
     /* Calculate order */
     function calculateOrder(){
 
         $this->total = 0;
+
+        // producten
 
         foreach($this->productOrder as $orderItem){
             if($orderItem['productData']['multiple']){
@@ -134,28 +196,42 @@ class OrderForm extends Component{
             }
         }
 
+        // kortingen
+
+        foreach($this->reductions as $reduction){
+            $calculatedTotal = $this->total - $reduction['price'];
+            if($calculatedTotal <= 0){
+                $calculatedTotal = 0;
+            }
+            $this->total = $calculatedTotal;
+        }
+
         return true;
     }
 
     /* Process order */
     function processOrder(){
 
-        if($this->total == 0){
-            // error -> niets geselecteerd
-            return false;
-        }else{
             // voeg toe aan DB
+
+            if($this->total == 0){
+                $payed = true;
+            }else{
+                $payed = false;
+            }
 
             $order = new Order([
                 'name' => $this->naam." ".$this->voorNaam,
                 'email' => $this->email,
                 'telephone' => $this->telefoon,
-                'payed' => false,
+                'payed' => $payed,
                 'price' => $this->total,
                 'notice' => "processing"
             ]);
 
             $order->save();
+
+            // producten
 
             foreach($this->productOrder as $orderItem){
                 if($orderItem['productData']['multiple']){
@@ -179,6 +255,16 @@ class OrderForm extends Component{
                 }
             }
 
+            // kortingen
+
+            foreach($this->reductions as $reduction){
+                $orderReduction = new Order_reduction([
+                    'order_id' => $order->id,
+                    'reduction_id' => $reduction['id']
+                ]);
+                $orderReduction->save();
+            }
+
             $this->paymentNotice = 'LUSTRUM-MG '.$order->id.' '.$this->voorNaam;
 
             $order->notice = $this->paymentNotice;
@@ -187,11 +273,11 @@ class OrderForm extends Component{
             $this->resetValidation();
 
             return true;
-        }
 
         
     }
 
+    /* Start */
     public function mount(){
         $products = Product::all();
 
