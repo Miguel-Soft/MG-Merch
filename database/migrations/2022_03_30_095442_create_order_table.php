@@ -22,6 +22,9 @@ return new class extends Migration
 
             $table->boolean('payed')->default(false);
 
+            $table->double('price', 4, 2);
+            $table->string('notice');
+
             $table->timestamps();
         });
     }

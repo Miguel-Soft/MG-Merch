@@ -13,7 +13,9 @@ class Order extends Model
         'name',
         'email',
         'telephone',
-        'payed'
+        'payed',
+        'price',
+        'notice'
     ];
 
     public function order_stock(){

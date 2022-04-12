@@ -12,26 +12,46 @@
                     
                     <h3 class="font-bold mb-5 text-xl">Algemene gegevens</h3>
 
+                    <div class="p-4 mb-4 text-sm text-blue-700 bg-blue-100 rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
+                        <span class="font-bold">Opgelet!</span> Deze inschrijving is per persoon. Indien u voor meerdere personen wilt inschrijven, dient u deze form meerdere keren in te vullen.
+                    </div>
+
                     <div class="block grid grid-cols-1">
             
                         <div class="mb-6">
-                            <label for="naam" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Naam</label>
+                            <label for="naam" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Naam *</label>
                             <input wire:model="naam" type="naam" id="text" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                            @error('naam')
+                                <span class="text-xs text-red-500 mt-1">Dit veld is verplicht in te vullen</span>
+                            @enderror
                         </div>
             
                         <div class="mb-6">
-                            <label for="voornaam" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Voornaam</label>
+                            <label for="voornaam" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Voornaam *</label>
                             <input wire:model="voorNaam" type="voornaam" id="text" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                            @error('voorNaam')
+                                <span class="text-xs text-red-500 mt-1">Dit veld is verplicht in te vullen</span>
+                            @enderror
                         </div>
             
                         <div class="mb-6">
-                            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email</label>
+                            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email *</label>
                             <input wire:model="email" type="email" id="text" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                            @error('email')
+                                @if($message == 'email_exist')
+                                    <span class="text-xs text-red-500 mt-1">Deze email is al gebruikt</span>
+                                @else
+                                    <span class="text-xs text-red-500 mt-1">Dit veld is verplicht in te vullen</span>
+                                @endif
+                            @enderror
                         </div>
             
                         <div class="mb-6">
-                            <label for="telefoon" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Telefoon</label>
+                            <label for="telefoon" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Telefoon *</label>
                             <input wire:model="telefoon" type="telefoon" id="text" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                            @error('telefoon')
+                                <span class="text-xs text-red-500 mt-1">Dit veld is verplicht in te vullen</span>
+                            @enderror
                         </div>
 
                         <label for="toggle-example" class="flex relative items-center mb-4 cursor-pointer">
@@ -39,11 +59,6 @@
                             <div class="w-11 h-6 bg-gray-200 rounded-full border border-gray-200 toggle-bg dark:bg-gray-700 dark:border-gray-600"></div>
                             <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Ik wens deel te nemen aan de BBQ</span>
                         </label>
-
-                        {{-- <div class="flex items-center mb-4">
-                            <input wire:model="bbq" id="bbq" aria-describedby="bbq" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500">
-                            <label for="bbq" class="ml-3 text-sm font-medium text-gray-900">Ik wens deel te nemen aan de BBQ</label>
-                        </div> --}}
             
                     </div>
 
@@ -155,6 +170,14 @@
                                
                             </tbody>
                         </table>
+
+                        {{-- <div class="block grid grid-cols-1 mt-3">
+                            <div class="mb-6">
+                                <label for="reduction" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Korting code</label>
+                                <input wire:model="reduction" type="text" id="reduction" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            </div>
+                        </div> --}}
+
                     </div>
 
                     @break

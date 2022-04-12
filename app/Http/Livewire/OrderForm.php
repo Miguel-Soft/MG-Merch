@@ -23,6 +23,21 @@ class OrderForm extends Component{
     public $paymentNotice = 'LUSTRUM-MG OrderID Voornaam';
     public $iban = "BE95 0635 4437 6058";
 
+    public $reductions = [];
+
+    // validation
+    public $validationRules = [
+        0 => [
+            'naam' => 'required',
+            'voorNaam' => 'required',
+            'email' => 'required',
+            'telefoon' => 'required',
+        ],
+        1 => [],
+        2 => [],
+        3 => [],
+    ];
+
     /* button handler */
     public function inputButtonHandler($productOrderId, $type){
 
@@ -42,11 +57,32 @@ class OrderForm extends Component{
 
     /* Page handler */
     public function nextPage(){
+
+        if(count($this->validationRules[$this->page]) > 0){
+            $this->validate($this->validationRules[$this->page]);
+        }
+
         switch($this->page){
 
             case 0:
-                // check als de bbq is aangeduid
-                $this->page ++;
+
+                // check als de email al gebruikt is
+
+                if(!Order::where('email',$this->email)->first()){
+                    // check als de bbq is aangeduid
+                    if($this->bbq){
+                        $this->page ++;
+                    }else{
+                        if($this->calculateOrder()){
+                            $this->page = 2;
+                        }
+                    }
+                }else{
+                    $this->addError('email', 'email_exist');
+                }
+
+                
+                
                 break;
             case 1:
                 if($this->calculateOrder()){
@@ -69,6 +105,13 @@ class OrderForm extends Component{
     public function previousPage(){
         switch($this->page){
             case 0:
+                break;
+            case 2:
+                if($this->bbq){
+                    $this->page --;
+                }else{
+                    $this->page = 0;
+                }
                 break;
             default:
                 $this->page --;
@@ -107,7 +150,9 @@ class OrderForm extends Component{
                 'name' => $this->naam." ".$this->voorNaam,
                 'email' => $this->email,
                 'telephone' => $this->telefoon,
-                'payed' => false
+                'payed' => false,
+                'price' => $this->total,
+                'notice' => "processing"
             ]);
 
             $order->save();
@@ -136,6 +181,11 @@ class OrderForm extends Component{
 
             $this->paymentNotice = 'LUSTRUM-MG '.$order->id.' '.$this->voorNaam;
 
+            $order->notice = $this->paymentNotice;
+            $order->save();
+
+            $this->resetValidation();
+
             return true;
         }
 
@@ -158,20 +208,6 @@ class OrderForm extends Component{
                 ];
             }
         }
-
-        // voeg ticket toe
-
-        // $this->productOrder[count($this->productOrder)] = [
-        //     'productData' => [
-        //         "name" => "VVK Lustrum event",
-        //         "info" => "Voorverkoop ticket voor het lustrum",
-        //         "price" => 10.0,
-        //         "multiple" => 0,
-        //         "show" => false
-        //     ],
-        //     'total'  => 1,
-        // ];
-
 
     }
 
