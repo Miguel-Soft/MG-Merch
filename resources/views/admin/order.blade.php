@@ -50,7 +50,7 @@
                     <table class="w-full text-sm text-left text-gray-500">
                         <tbody>
             
-                          <tr class="bg-white border-b dark:bg-gray-800">
+                          <tr class="bg-white border-b">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 Bestel ID
                             </th>
@@ -59,7 +59,7 @@
                             </td>
                           </tr>
 
-                          <tr class="bg-white border-b dark:bg-gray-800">
+                          <tr class="bg-white border-b">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 Telefoon
                             </th>
@@ -68,7 +68,7 @@
                             </td>
                           </tr>
 
-                          <tr class="bg-white border-b dark:bg-gray-800">
+                          <tr class="bg-white border-b">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 Email
                             </th>
@@ -77,7 +77,7 @@
                             </td>
                           </tr>
 
-                          <tr class="bg-white border-b dark:bg-gray-800">
+                          <tr class="bg-white border-b">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                               @if ($order['payed'])
                                   <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
@@ -122,7 +122,7 @@
             
                             @foreach ($products as $product)
                                 
-                                <tr class="bg-white border-b dark:bg-gray-800">
+                                <tr class="bg-white border-b">
                                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                         {{ $product['product']['name'] }}
                                     </th>
@@ -168,7 +168,7 @@
               
                               @foreach ($reductions as $reduction)
                                   
-                                  <tr class="bg-white border-b dark:bg-gray-800">
+                                  <tr class="bg-white border-b">
                                       <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                           {{ $reduction['name'] }}
                                       </th>
