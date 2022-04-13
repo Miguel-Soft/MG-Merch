@@ -39,10 +39,10 @@
                         </td>
                         <td class="px-6 py-4">
                             @if ($order['payed'])
-                                <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+                                <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded cursor-pointer"
                                 wire:click="handlePayed({{$order['id']}}, false)">Betaald</span>
                             @else
-                                <span class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+                                <span class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded cursor-pointer"
                                 wire:click="handlePayed({{$order['id']}}, true)">Open</span>
                             @endif
                         </td>
