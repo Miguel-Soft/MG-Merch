@@ -18,7 +18,7 @@ class Order extends Model
         'notice'
     ];
 
-    public function order_stock(){
+    public function order_product(){
         return $this->hasMany(Order_product::class);
     }
 

@@ -1,4 +1,4 @@
-<div>
+<div class="p-5">
 
     <h1 class="text-2xl py-5">Bestellingen</h1>
     
