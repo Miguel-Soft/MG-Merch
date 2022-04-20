@@ -243,7 +243,7 @@
                         <p>Uw bestelling is succesvol geregistreerd!<br/>Om uw bestelling te bevestigen: stort <b>€{{ $total }}</b> naar <span class="copy bg-blue-100 cursor-pointer" onclick="navigator.clipboard.writeText('{{ $iban }}')">{{ $iban }}</span> met mededeling: <span class="copy bg-blue-100 cursor-pointer" onclick="navigator.clipboard.writeText('{{ $paymentNotice }}')">{{ $paymentNotice }}</span></p>
 
                         <div class="p-4 mt-4 text-sm text-blue-700 bg-blue-100 rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
-                            <span class="font-bold">Opgelet!</span> Bestellingen moeten betaald zijn tegen <b>21 april 2022</b>. Indien we geen betaling hebben ontvangen word de bestelling niet bevestigd.
+                            <span class="font-bold">Opgelet!</span> Bestellingen moeten betaald zijn tegen <b>22 april 2022</b>. Indien we geen betaling hebben ontvangen word de bestelling niet bevestigd.
                         </div>
                     @endif
 
