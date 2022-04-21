@@ -76,11 +76,11 @@ class PdfController extends Controller
                 'list' => $list
         ]);
 
-        //ob_end_clean();
+        ob_end_clean();
 
-        // return $pdf->setPaper('a4')->stream();
+        return $pdf->setPaper('a4')->stream();
 
-        return $pdf->download('orderlist.pdf');
+        // return $pdf->download('orderlist.pdf');
 
     }
 
