@@ -6,7 +6,8 @@ use App\Models\Order;
 use App\Models\Order_product;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use PDF;
+// use PDF;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class PdfController extends Controller
 {
