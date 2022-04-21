@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,11 +22,18 @@ Route::get('/', function () {
 
 Route::prefix('/admin')->group(function () {
 
+    // Orders
+
     Route::get('/', function () {
-        return view('admin.admin');
+        return view('admin.orders');
     })->name('admin');
 
-    Route::get('/order/{id}', [OrderController::class, 'index'])->name('admin.order');;
+    Route::get('/order/{id}', [OrderController::class, 'index'])->name('admin.order');
+
+
+    // products
+
+    Route::get('/products', [ProductController::class, 'index'])->name('admin.producs');
 
 });
 
