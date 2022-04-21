@@ -27,7 +27,7 @@
                         <div class="flex items-center space-x-4">
                             <div class="flex-1 min-w-0">
                                 <p class="text-sm font-medium text-gray-900 truncate">
-                                    Inkomsten (Betaald/te betalen)
+                                    Inkomsten (betaald/te betalen)
                                 </p>
                             </div>
                             <div class="inline-flex items-center text-base font-semibold text-gray-900">
@@ -84,7 +84,7 @@
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                             {{ $order['name'] }}
                         </th>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 whitespace-nowrap">
                             € {{ $order['price'] }}
                         </td>
                         <td class="px-6 py-4">
