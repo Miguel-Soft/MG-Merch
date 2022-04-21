@@ -13,6 +13,7 @@
 
   <!-- pdf -->
   
+  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     <table class="w-full text-sm text-left text-gray-500">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
@@ -26,6 +27,10 @@
                   </th>
                 @endforeach
   
+                {{-- <th scope="col" class="px-6 py-3 text-right">
+                    Subtotaal
+                </th> --}}
+  
             </tr>
         </thead>
         <tbody>
@@ -33,7 +38,7 @@
             @foreach ($list as $listItem)
                 
                 <tr class="bg-white border-b">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{ $listItem['order_detail']['name'] }}
                     </th>
                     
@@ -43,12 +48,17 @@
                       </th>
                     @endforeach
   
+                    {{-- <td class="px-6 py-4 text-right">
+                        € {{ ($product['total'] * $product['product']['price']) }}
+                    </td> --}}
+  
                 </tr>
   
             @endforeach
             
         </tbody>
     </table>
+  </div>
 
   <!-- end pdf -->
 
