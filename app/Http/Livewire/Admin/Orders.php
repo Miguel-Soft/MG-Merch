@@ -12,6 +12,7 @@ class Orders extends Component
     public $products = [];
 
     public $totalIncome = 0;
+    public $totalPayedIncome = 0;
 
     public $payed = 0;
 
@@ -25,8 +26,10 @@ class Orders extends Component
 
         if($payed){
             $this->payed += 1;
+            $this->totalPayedIncome += $currentOrder->price;
         }else{
             $this->payed -= 1;
+            $this->totalPayedIncome -= $currentOrder->price;
         }
     }
 
@@ -42,6 +45,7 @@ class Orders extends Component
 
             if($order->payed){
                 $this->payed += 1;
+                $this->totalPayedIncome += $order->price;
             }
 
         }

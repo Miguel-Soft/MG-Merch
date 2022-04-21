@@ -31,7 +31,7 @@
                                 </p>
                             </div>
                             <div class="inline-flex items-center text-base font-semibold text-gray-900">
-                                € {{ $totalIncome }}
+                               € {{$totalPayedIncome}} / {{ $totalIncome }}
                             </div>
                         </div>
                     </li>
