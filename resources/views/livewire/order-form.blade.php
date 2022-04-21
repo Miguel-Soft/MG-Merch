@@ -253,6 +253,10 @@
                     @break
                 
                 @default
+
+                <div class="h-full flex justify-center ">
+                    <div><span class="font-bold text-xl pt-12">Bestellingen afgesloten.</span></div>
+                </div>    
                     
             @endswitch
 

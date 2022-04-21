@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ProductController;
 
 /*
@@ -23,7 +24,6 @@ Route::get('/', function () {
 Route::prefix('/admin')->group(function () {
 
     // Orders
-
     Route::get('/', function () {
         return view('admin.orders');
     })->name('admin');
@@ -32,8 +32,11 @@ Route::prefix('/admin')->group(function () {
 
 
     // products
-
     Route::get('/products', [ProductController::class, 'index'])->name('admin.producs');
+
+    // pdf generator
+    Route::get('/pdf/all', [PdfController::class, 'makeOrderList'])->name('admin.pdf.all');
+    Route::get('/pdf/product/{id}', [PdfController::class, 'makeSpecificOrderList'])->name('admin.pdf.specific');
 
 });
 
