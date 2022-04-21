@@ -16,7 +16,13 @@ class ProductController extends Controller
         $tempProducts = Product::all();
 
         foreach($tempProducts as $product){
-            $product['aantal'] = Order_product::where('product_id', $product->id)->count();
+            $orders = Order_product::where('product_id', $product->id)->get();
+            $product['aantal'] = 0;
+
+            foreach($orders as $order){
+                $product['aantal'] += $order->total;
+            }
+
             array_push($this->products, $product);
         }
 
