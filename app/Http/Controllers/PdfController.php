@@ -76,7 +76,7 @@ class PdfController extends Controller
                 'list' => $list
         ]);
 
-        return $pdf->download('orderList.pdf');
+        return $pdf->setPaper('a4')->stream();
 
     }
 
