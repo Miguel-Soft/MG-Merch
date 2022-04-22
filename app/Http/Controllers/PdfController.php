@@ -6,8 +6,6 @@ use App\Models\Order;
 use App\Models\Order_product;
 use App\Models\Product;
 use Illuminate\Http\Request;
-// use PDF;
-use Barryvdh\DomPDF\Facade as PDF;
 
 class PdfController extends Controller
 {
@@ -70,17 +68,6 @@ class PdfController extends Controller
         //     'productList' => $products,
         //     'list' => $list
         // ]);
-
-        $pdf = PDF::loadView('pdf.orderlist', [
-                'productList' => $products,
-                'list' => $list
-        ]);
-
-        ob_end_clean();
-
-        return $pdf->setPaper('a4')->stream();
-
-        // return $pdf->download('orderlist.pdf');
 
     }
 
