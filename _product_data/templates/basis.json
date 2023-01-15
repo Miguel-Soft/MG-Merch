@@ -1,0 +1,13 @@
+{
+    "sizes": ["S", "M", "L", "XL", "XXL"],
+    "colors": [
+        {
+            "name": "zwart",
+            "hexcolor": "#000"
+        },
+        {
+            "name": "wit",
+            "hexcolor": "#FFF"
+        }
+    ]
+}

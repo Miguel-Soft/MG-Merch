@@ -18,7 +18,14 @@ return new class extends Migration
 
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('product_id');
-            $table->integer('total');
+
+            // MG Merch
+            $table->string('custom_text');
+            $table->string('color');
+            $table->string('size');
+
+            // MG BBQ
+            // $table->integer('total');
 
             $table->timestamps();
 

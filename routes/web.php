@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderForm;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::post('/', [OrderForm::class, 'action'])->name('orderForm.action');
 
 Route::prefix('/admin')->group(function () {
 

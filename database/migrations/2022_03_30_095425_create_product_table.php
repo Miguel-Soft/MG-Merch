@@ -16,12 +16,24 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
 
+            // MG BBQ
+
+            // $table->string('name');
+            // $table->string('info');
+            // $table->double('price', 4, 2);
+            // $table->boolean('multiple');
+            // $table->boolean('show');
+            // $table->integer('startval')->default('0');
+
+            // MG Merch
+
             $table->string('name');
             $table->string('info');
             $table->double('price', 4, 2);
-            $table->boolean('multiple');
-            $table->boolean('show');
-            $table->integer('startval')->default('0');
+            $table->json('photo');
+            $table->boolean('custom_text');
+            $table->boolean('show')->default(true);
+            $table->string('data_json');
 
             $table->timestamps();
         });

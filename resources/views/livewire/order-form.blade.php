@@ -1,6 +1,6 @@
 <div class="h-full">
 
-    <form action="#" class="p-5 flex flex-col h-full">
+    <div class="p-5 flex flex-col h-full">
 
         {{-- <p>Lorem ipsum</p> --}}
 
@@ -13,7 +13,7 @@
                     <h3 class="font-bold mb-5 text-xl">Algemene gegevens</h3>
 
                     <div class="p-4 mb-4 text-sm text-blue-700 bg-blue-100 rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
-                        <span class="font-bold">Opgelet!</span> Deze inschrijving is per persoon. Indien u voor meerdere personen wilt inschrijven, dient u deze form meerdere keren in te vullen.
+                        <span class="font-bold">Opgelet!</span> De bestelling is pas compleet na het ontvangst van de betaling.
                     </div>
 
                     <div class="block grid grid-cols-1">
@@ -65,46 +65,92 @@
                     @break
                 @case(1)
 
-                    <h3 class="font-bold mb-5 text-xl">BBQ</h3>
+                    <h3 class="font-bold mb-5 text-xl">Merge</h3>
 
-                    <p>Sauzen zijn inbegrepen. (Ketchup, Mayonaise, Lookboter, Brazil (?), Andalouse)</p>
+                    <p>Vind hier het maattabel</p>
 
-                    <div class="block">
+                    <div class="grid grid-cols-2 gap-x-4 gap-y-6 mt-8">
             
                         @foreach ($productOrder as $product)
 
                             @if ($product['productData']['show'])
-                                <h2 class="mt-2">
-                                    <div class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-gray-200">
-                                        <div class="grow-0">
-                                            <span class="text-xl font-bold tracking-tight text-gray-900 block">{{ $product['productData']['name'] }}</span>
-                                            <span class="text-l font-bold tracking-tight text-blue-700 block">€ {{ $product['productData']['price'] }}</span>
-                                        </div>
+                                <h2 class="mb-8 w-full text-base text-left text-gray-500 bg-slate-50">
 
-                                        <div class="grow">
-                                            <!-- input -->
+                                    <!-- foto -->
 
-                                            @if ($product['productData']['multiple'])
-                                                <div class="flex p-4 justify-end input-button">
-                                                    <span class="border border-gray-300 text-gray-900 text-sm p-2.5 cursor-pointer" wire:click="inputButtonHandler({{$product['productData']['id']}}, '-1')">-</span>
-                                                    <input type="number" min="0" wire:model="productOrder.{{ $product['productData']['id'] }}.total" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm p-2.5 w-14 inline-block align-middle pointer-events-none" required>
-                                                    <span class="border border-gray-300 text-gray-900 text-sm p-2.5 cursor-pointer" wire:click="inputButtonHandler({{$product['productData']['id']}}, '+1')">+</span>
-                                                </div>
-                                            @else
-                                                {{-- <input type="checkbox" wire:model="productOrder.{{ $product['productData']['id'] }}.total"> --}}
-                                                <div class="p-4 flex justify-end">
-                                                    <label for="toggle-example" class="flex relative cursor-pointer">
-                                                        <input wire:model="productOrder.{{ $product['productData']['id'] }}.total" type="checkbox" id="toggle-example" class="sr-only">
-                                                        <div class="w-11 h-6 bg-gray-200 rounded-full border border-gray-200 toggle-bg"></div>
-                                                    </label>
-                                                </div>
+                                    <img alt="" src="{{ url('storage/images/'.$product['productData']['photo'][0]) }}" title=""/>
+
+                                    <form action="{{ route('orderForm.action') }}" method="POST">
+                                        @csrf
+                                        <span class="text-lg font-bold tracking-tight text-gray-900 block mt-2">{{ $product['productData']['name'] }}</span>
+
+                                        <input type="hidden" id="productid" name="productid" value="{{ $product['productData']['id'] }}">
+
+                                        <!-- kleur -->
+                                        <div class="mt-2">
+                                            <label class="block mb-2 text-sm font-medium text-gray-900">Kleur</label>
+                                            <div class="flex justify-start w-full font-medium text-left text-gray-500 mt-2">
+
+                                                @foreach ($product['customise']->colors as $color)
+
+                                                    <div class="flex items-center px-2 border border-gray-300 rounded mr-2" style="background-color:{{ $color->hexcolor }}">
+                                                        {{-- <input wire:model="productOrder.{{ $product['productData']['id'] }}.value.color" type="radio" value="{{ $color->name }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:bg-gray-700"> --}}
+                                                        <input type="radio" name="color" value="{{ $color->name }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:bg-gray-700">
+                                                        <label class="w-full py-2 ml-2 text-sm font-medium">{{ $color->name }}</label>
+                                                    </div>
                                                 
+                                                @endforeach
 
-                                            @endif
+                                            </div>
+                                        <div>
 
+                                        <!-- maat -->
+                                        <div class="mt-2">
+                                            <label class="block mb-2 text-sm font-medium text-gray-900">Maat</label>
+                                            <div class="flex justify-start w-full font-medium text-left text-gray-500 mt-2">
+
+                                                @foreach ($product['customise']->sizes as $size)
+
+                                                    <div class="flex items-center px-2 border border-gray-300 rounded mr-2">
+                                                        {{-- <input wire:model="productOrder.{{ $product['productData']['id'] }}.value.size" type="radio" value="{{ $size }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:bg-gray-700"> --}}
+                                                        <input type="radio" name="size" value="{{ $size }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:bg-gray-700">
+                                                        <label class="w-full py-2 ml-2 text-sm font-medium text-gray-900">{{ $size }}</label>
+                                                    </div>
+
+                                                @endforeach
+
+                                            </div>
                                         </div>
-                                        <svg class="w-6 h-6 grow-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    </div>
+
+                                        @if ($product['productData']['custom_text'])
+                                            <!-- custom tekst -->
+                                            <div class="mt-2">
+                                                <label class="block mb-2 text-sm font-medium text-gray-900">Persoonlijke tekst</label>
+                                                <div class="flex items-center">
+                                                    <input type="text" name="customtext" placeholder="MOEDER GEVAAR" id="small-input" class="block w-64 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs mr-2">
+                                                    <svg class="w-6 h-6 grow-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                </div>
+                                            </div>
+                                        @endif
+
+                                        <!-- aantal -->
+                                        <div class="mt-2">
+                                            <label class="block mb-2 text-sm font-medium text-gray-900">Aantal</label>
+                                            <div class="flex justify-between">
+                                                {{-- <input type="number" min="0" max="99" id="small-input" wire:model="productOrder.{{ $product['productData']['id'] }}.value.total" class="block w-24 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs"> --}}
+                                                <input type="number" name="total" min="0" max="99" id="small-input" class="block w-24 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs">
+                                                <div class="flex items-center">
+                                                    <span class="text-l font-bold tracking-tight text-blue-700 block mr-2">€ {{ $product['productData']['price'] }},00/st.</span>
+                                                    <button type="submit" class="text-indigo-900 bg-white border border-gray-300 hover:bg-gray-100 rounded-lg text-sm px-5 py-2.5">
+                                                        <svg class="w-6 h-6 grow-0" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M24 0C10.7 0 0 10.7 0 24S10.7 48 24 48H69.5c3.8 0 7.1 2.7 7.9 6.5l51.6 271c6.5 34 36.2 58.5 70.7 58.5H488c13.3 0 24-10.7 24-24s-10.7-24-24-24H199.7c-11.5 0-21.4-8.2-23.6-19.5L170.7 288H459.2c32.6 0 61.1-21.8 69.5-53.3l41-152.3C576.6 57 557.4 32 531.1 32H360V134.1l23-23c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-64 64c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l23 23V32H120.1C111 12.8 91.6 0 69.5 0H24zM176 512a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm336-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"/></svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        
+                                    </form>
+
                                 </h2>
                             @endif
             
@@ -284,5 +330,5 @@
             @endswitch
         </div>
 
-    </form>
+    </div>
 </div>

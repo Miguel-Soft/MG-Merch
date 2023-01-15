@@ -18,12 +18,11 @@ class OrderForm extends Component{
     public $telefoon;
 
 
-    public $page = 10;
-    public $bbq = false;
+    public $page = 1;
     public $productOrder = [];
     public $total = 0;
-    public $paymentNotice = 'LUSTRUM-MG OrderID Voornaam';
-    public $iban = "BE95 0635 4437 6058";
+    public $paymentNotice = 'Naam + Voornaam + MG Merch';
+    public $iban = "BE22 0837 9298 9147";
 
     public $reductionField;
     public $reductions = [];
@@ -41,23 +40,6 @@ class OrderForm extends Component{
         3 => [],
     ];
 
-    /* button handler */
-    public function inputButtonHandler($productOrderId, $type){
-
-        $productTotal = $this->productOrder[$productOrderId]['total'];
-
-        switch($type){
-            case '-1':
-                if($productTotal >= 1){
-                    $this->productOrder[$productOrderId]['total'] --;
-                }
-            break;
-            case '+1':
-                $this->productOrder[$productOrderId]['total'] ++;
-            break;
-        }
-    }
-
     /* Page handler */
     public function nextPage(){
 
@@ -70,22 +52,12 @@ class OrderForm extends Component{
             case 0:
 
                 // check als de email al gebruikt is
-
                 if(!Order::where('email',$this->email)->first()){
-                    // check als de bbq is aangeduid
-                    if($this->bbq){
-                        $this->page ++;
-                    }else{
-                        if($this->calculateOrder()){
-                            $this->page = 2;
-                        }
-                    }
+                    $this->page ++;
                     $this->resetValidation();
                 }else{
                     $this->addError('email', 'email_exist');
                 }
-
-                
                 
                 break;
             case 1:
@@ -115,11 +87,7 @@ class OrderForm extends Component{
             case 0:
                 break;
             case 2:
-                if($this->bbq){
-                    $this->page --;
-                }else{
-                    $this->page = 0;
-                }
+                $this->page --;
                 break;
             default:
                 $this->page --;
@@ -281,18 +249,23 @@ class OrderForm extends Component{
     public function mount(){
         $products = Product::all();
 
+
         foreach($products as $product){
-            if($product->multiple){
-                $this->productOrder[$product->id] = [
-                    'productData' => $product,
-                    'total' => $product->startval
-                ];
-            }else{
-                $this->productOrder[$product->id] = [
-                    'productData' => $product,
-                    'total' => $product->startval
-                ];
-            }
+
+            $data_json = json_decode(file_get_contents(storage_path() . "/app/public/templates/". $product->data_json));
+
+            $this->productOrder[$product->id] = [
+                'productData' => $product,
+                'customise' => $data_json,
+                'value'=> [
+                    'size' => $data_json->sizes[0],
+                    'color' => $data_json->colors[0]->name,
+                    'total' => 1
+                ]
+            ];
+
+            $this->productOrder[$product->id]["productData"]->photo = json_decode($this->productOrder[$product->id]["productData"]->photo);
+
         }
 
     }

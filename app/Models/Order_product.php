@@ -9,10 +9,20 @@ class Order_product extends Model
 {
     use HasFactory;
 
+    // MG BBQ
+    // protected $fillable = [
+    //     'order_id',
+    //     'product_id',
+    //     'total'
+    // ];
+
+    //MG Merch
     protected $fillable = [
         'order_id',
         'product_id',
-        'total'
+        'custom_text',
+        'color',
+        'size'
     ];
 
     public function order(){

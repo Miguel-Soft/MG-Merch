@@ -1,0 +1,29 @@
+{
+    "colors": [
+        { "multiple_colors": [
+            {
+                "name": "zwart",
+                "hexcolor": "#000"
+            },
+            {
+                "name": "wit",
+                "hexcolor": "#FFF"
+            },
+            {
+                "name": "rood",
+                "hexcolor": "#F00"
+            }
+        ]},
+        { "black_white": [
+            {
+                "name": "zwart",
+                "hexcolor": "#000"
+            },
+            {
+                "name": "wit",
+                "hexcolor": "#FFF"
+            }
+        ]}
+    ]
+        
+}
