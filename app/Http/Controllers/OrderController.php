@@ -21,7 +21,10 @@ class OrderController extends Controller
         foreach(Order_product::where('order_id', $id)->get() as $productRaw){
             array_push($orderProducts, [
                 'product' => Product::find($productRaw->product_id),
-                'total' => $productRaw->total
+                'total' => $productRaw->total,
+                'size' => $productRaw->size,
+                'color' => $productRaw->color,
+                'custom_text' => $productRaw->custom_text,
             ]);
         }
 

@@ -79,13 +79,19 @@
                       Naam
                   </th>
                   <th scope="col" class="px-6 py-3">
-                      Prijs
+                      Qte
                   </th>
                   <th scope="col" class="px-6 py-3">
-                      Aantal
+                      Maat
+                  </th>
+                  <th scope="col" class="px-6 py-3">
+                      Kleur
+                  </th>
+                  <th scope="col" class="px-6 py-3">
+                      Tekst
                   </th>
                   <th scope="col" class="px-6 py-3 text-right">
-                      Subtotaal
+                      Subtot.
                   </th>
               </tr>
           </thead>
@@ -95,13 +101,19 @@
                   
                   <tr class="bg-white border-b">
                       <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                          {{ $product['product']['name'] }}
+                            {{ $product['product']['name'] }}
                       </th>
                       <td class="px-6 py-4">
-                          € {{ $product['product']['price'] }}
+                            {{ $product['total'] }}
                       </td>
                       <td class="px-6 py-4">
-                        {{ $product['total'] }}
+                            {{ $product['size'] }}
+                      </td>
+                      <td class="px-6 py-4">
+                            {{ $product['color'] }}
+                      </td>
+                      <td class="px-6 py-4">
+                            {{ $product['custom_text'] }}
                       </td>
                       <td class="px-6 py-4 text-right">
                           € {{ ($product['total'] * $product['product']['price']) }}
