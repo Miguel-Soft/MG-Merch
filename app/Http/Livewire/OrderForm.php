@@ -28,7 +28,7 @@ class OrderForm extends Component{
     public $telefoon;
 
 
-    public $page = 0;
+    public $page = 1;
     public $productOrder = [];
     public $total = 0;
     public $paymentNotice = 'Naam + Voornaam + MG Merch';
@@ -212,7 +212,7 @@ class OrderForm extends Component{
                     'order_id' => $order->id,
                     'product_id' => $cartItem['id'],
                     'custom_text' => $cartItem['options']['customtext'] ?? "",
-                    'color' => $cartItem['options']['color'],
+                    'color' => $cartItem['options']['color'], // veranderen naar effectief kleur
                     'size' => $cartItem['options']['size'],
                     'total' => $cartItem['qty']
                 ]);
@@ -293,7 +293,7 @@ class OrderForm extends Component{
 
             
 
-            !array_key_exists($product->id, $this->currentProductView['color']) ? $this->currentProductView['color'][$product->id] = $data_json->colors[0]->name : null;
+            !array_key_exists($product->id, $this->currentProductView['color']) ? $this->currentProductView['color'][$product->id] = 0 : null;
             !array_key_exists($product->id, $this->currentProductView['size']) ? $this->currentProductView['size'][$product->id] = $data_json->sizes[0] : null;
             !array_key_exists($product->id, $this->currentProductView['total']) ? $this->currentProductView['total'][$product->id] = 1: null;
 

@@ -3,11 +3,13 @@
     "colors": [
         {
             "name": "zwart",
-            "hexcolor": "rgb(25,25,25)"
+            "hexcolor": "rgb(25,25,25)",
+            "images": ["18.png", "19.png"]
         },
         {
             "name": "wit",
-            "hexcolor": "rgb(247,247,247)"
+            "hexcolor": "rgb(247,247,247)",
+            "images": ["20.png", "21.png"]
         }
     ]
 }

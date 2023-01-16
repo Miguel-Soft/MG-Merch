@@ -3,7 +3,8 @@
     "colors": [
         {
             "name": "Rood",
-            "hexcolor": "rgb(176,49,40)"
+            "hexcolor": "rgb(176,49,40)",
+            "images": ["22.png", "23.png"]
         }
     ]
 }
