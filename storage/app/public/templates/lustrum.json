@@ -1,0 +1,9 @@
+{
+    "sizes": ["S", "M", "L", "XL", "XXL"],
+    "colors": [
+        {
+            "name": "Rood",
+            "hexcolor": "rgb(176,49,40)"
+        }
+    ]
+}
