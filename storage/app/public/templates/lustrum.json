@@ -1,5 +1,5 @@
 {
-    "sizes": ["S", "M", "L", "XL", "XXL"],
+    "sizes": ["S", "M", "L", "XL", "XXL", "XXXL"],
     "colors": [
         {
             "name": "Rood",
