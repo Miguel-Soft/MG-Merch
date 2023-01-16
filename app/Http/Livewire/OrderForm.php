@@ -8,8 +8,18 @@ use App\Models\Order_product;
 use App\Models\Order_reduction;
 use App\Models\Product;
 use Livewire\Component;
+use Gloudemans\Shoppingcart\Facades\Cart;
 
 class OrderForm extends Component{
+
+    public $cart;
+
+    public $currentProductView = [
+        "color" => [],
+        "size" => [],
+        "customtext" => [],
+        "total" => []
+    ];
 
     // algemene gegevens
     public $naam;
@@ -18,7 +28,7 @@ class OrderForm extends Component{
     public $telefoon;
 
 
-    public $page = 1;
+    public $page = 0;
     public $productOrder = [];
     public $total = 0;
     public $paymentNotice = 'Naam + Voornaam + MG Merch';
@@ -50,7 +60,7 @@ class OrderForm extends Component{
         switch($this->page){
 
             case 0:
-
+                // ga naar bestelpagina
                 // check als de email al gebruikt is
                 if(!Order::where('email',$this->email)->first()){
                     $this->page ++;
@@ -61,12 +71,14 @@ class OrderForm extends Component{
                 
                 break;
             case 1:
+                // ga naar besteloverzichtpagina (of winkelwagen)
                 if($this->calculateOrder()){
                     $this->page ++;
                     $this->resetValidation();
                 }
                 break;
             case 2:
+                // start bestelprocess > ga naar status pagina
                 if($this->processOrder()){
                     $this->page ++;
                     $this->resetValidation();
@@ -154,15 +166,7 @@ class OrderForm extends Component{
 
         // producten
 
-        foreach($this->productOrder as $orderItem){
-            if($orderItem['productData']['multiple']){
-                $this->total += ($orderItem['productData']['price'] * $orderItem['total']);
-            }else{
-                if($orderItem['total']){
-                    $this->total += $orderItem['productData']['price'];
-                }
-            }
-        }
+        $this->total = Cart::total();
 
         // kortingen
 
@@ -181,6 +185,8 @@ class OrderForm extends Component{
     function processOrder(){
 
             // voeg toe aan DB
+
+            $this->total = Cart::total();
 
             if($this->total == 0){
                 $payed = true;
@@ -201,26 +207,16 @@ class OrderForm extends Component{
 
             // producten
 
-            foreach($this->productOrder as $orderItem){
-                if($orderItem['productData']['multiple']){
-                    if($orderItem['total'] !== 0){
-                        $orderProduct = new Order_product([
-                            'order_id' => $order->id,
-                            'product_id' => $orderItem['productData']['id'],
-                            'total' => $orderItem['total']
-                        ]);
-                        $orderProduct->save();
-                    }
-                }else{
-                    if($orderItem['total']){
-                        $orderProduct = new Order_product([
-                            'order_id' => $order->id,
-                            'product_id' => $orderItem['productData']['id'],
-                            'total' => 1
-                        ]);
-                        $orderProduct->save();
-                    }
-                }
+            foreach($this->cart as $cartItem){
+                $orderProduct = new Order_product([
+                    'order_id' => $order->id,
+                    'product_id' => $cartItem['id'],
+                    'custom_text' => $cartItem['options']['customtext'],
+                    'color' => $cartItem['options']['color'],
+                    'size' => $cartItem['options']['size'],
+                    'total' => $cartItem['qty']
+                ]);
+                $orderProduct->save();
             }
 
             // kortingen
@@ -233,22 +229,55 @@ class OrderForm extends Component{
                 $orderReduction->save();
             }
 
-            $this->paymentNotice = 'LUSTRUM-MG '.$order->id.' '.$this->voorNaam;
+            $this->paymentNotice = $this->naam." ".$this->voorNaam." MG Merch";
 
             $order->notice = $this->paymentNotice;
             $order->save();
 
             $this->resetValidation();
-
+            Cart::destroy();
             return true;
 
         
     }
 
+    
+
+
+    /* CARD */
+    /* Add to cart */
+    public function addToCart($productId){
+
+        $product = Product::findOrFail($productId);
+    
+        Cart::add(
+            $product->id, 
+            $product->name,
+            $this->currentProductView['total'][$productId],
+            $product->price,
+            0, // weight
+            [
+                'color' => $this->currentProductView['color'][$productId],
+                'size' => $this->currentProductView['size'][$productId],
+                'customtext' => $this->currentProductView['customtext'][$productId] ?? null
+            ]
+        );
+    }
+
+    /* Remove from cart */
+    public function removeFromCart($rowId){
+        Cart::remove($rowId);
+        $this->calculateOrder();
+    }
+
     /* Start */
     public function mount(){
-        $products = Product::all();
+        //
+    }
 
+    public function render(){
+        $this->cart = Cart::content();
+        $products = Product::all();
 
         foreach($products as $product){
 
@@ -256,21 +285,24 @@ class OrderForm extends Component{
 
             $this->productOrder[$product->id] = [
                 'productData' => $product,
-                'customise' => $data_json,
-                'value'=> [
-                    'size' => $data_json->sizes[0],
-                    'color' => $data_json->colors[0]->name,
-                    'total' => 1
-                ]
+                'customise' => $data_json
             ];
 
             $this->productOrder[$product->id]["productData"]->photo = json_decode($this->productOrder[$product->id]["productData"]->photo);
 
+
+            
+
+            !array_key_exists($product->id, $this->currentProductView['color']) ? $this->currentProductView['color'][$product->id] = $data_json->colors[0]->name : null;
+            !array_key_exists($product->id, $this->currentProductView['size']) ? $this->currentProductView['size'][$product->id] = $data_json->sizes[0] : null;
+            !array_key_exists($product->id, $this->currentProductView['total']) ? $this->currentProductView['total'][$product->id] = 1: null;
+
+            $product->custom_text &&  !array_key_exists($product->id, $this->currentProductView['customtext']) ? $this->currentProductView['customtext'][$product->id] = "" : null;
+
         }
 
-    }
 
-    public function render(){
+        //$this->calculateOrder();
         return view('livewire.order-form');
     }
 }

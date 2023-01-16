@@ -22,7 +22,8 @@ class Order_product extends Model
         'product_id',
         'custom_text',
         'color',
-        'size'
+        'size',
+        'total'
     ];
 
     public function order(){

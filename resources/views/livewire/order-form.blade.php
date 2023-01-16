@@ -65,22 +65,46 @@
                     @break
                 @case(1)
 
+                    <style>
+                        /* incard style */
+                        .incard{
+                            position: relative;
+                        }
+
+                        .incard::before{
+                            content: 'In de winkelwagen';
+                            position: absolute;
+                            margin: 0px;
+                            background-color: rgba(0, 0, 0, 0.7);
+                            color: #FFF;
+                            font-weight: bold;
+                            padding: 5px 10px;
+
+                            z-index: 999;
+                        }
+                    </style>
+
+
                     <h3 class="font-bold mb-5 text-xl">Merge</h3>
 
-                    <p>Vind hier het maattabel</p>
+                    <p>Vind hier het maattabel (cart: {{ $cart->count() }})</p>
 
                     <div class="grid grid-cols-2 gap-x-4 gap-y-6 mt-8">
             
                         @foreach ($productOrder as $product)
 
                             @if ($product['productData']['show'])
-                                <h2 class="mb-8 w-full text-base text-left text-gray-500 bg-slate-50">
+                                <h2 class="mb-8 w-full text-base text-left text-gray-500 bg-slate-50
+                                    @if ($cart->where('id', $product['productData']['id'])->count())
+                                        incard
+                                    @endif
+                                ">
 
                                     <!-- foto -->
 
                                     <img alt="" src="{{ url('storage/images/'.$product['productData']['photo'][0]) }}" title=""/>
 
-                                    <form action="{{ route('orderForm.action') }}" method="POST">
+                                    <form wire:submit.prevent="addToCart({{ $product['productData']['id'] }})">
                                         @csrf
                                         <span class="text-lg font-bold tracking-tight text-gray-900 block mt-2">{{ $product['productData']['name'] }}</span>
 
@@ -94,8 +118,8 @@
                                                 @foreach ($product['customise']->colors as $color)
 
                                                     <div class="flex items-center px-2 border border-gray-300 rounded mr-2" style="background-color:{{ $color->hexcolor }}">
-                                                        {{-- <input wire:model="productOrder.{{ $product['productData']['id'] }}.value.color" type="radio" value="{{ $color->name }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:bg-gray-700"> --}}
-                                                        <input type="radio" name="color" value="{{ $color->name }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:bg-gray-700">
+                                                        <input wire:model="currentProductView.color.{{ $product['productData']['id'] }}" type="radio" value="{{ $color->name }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:bg-gray-700">
+                                                        {{-- <input type="radio" name="color" value="{{ $color->name }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:bg-gray-700"> --}}
                                                         <label class="w-full py-2 ml-2 text-sm font-medium">{{ $color->name }}</label>
                                                     </div>
                                                 
@@ -112,8 +136,8 @@
                                                 @foreach ($product['customise']->sizes as $size)
 
                                                     <div class="flex items-center px-2 border border-gray-300 rounded mr-2">
-                                                        {{-- <input wire:model="productOrder.{{ $product['productData']['id'] }}.value.size" type="radio" value="{{ $size }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:bg-gray-700"> --}}
-                                                        <input type="radio" name="size" value="{{ $size }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:bg-gray-700">
+                                                        <input wire:model="currentProductView.size.{{ $product['productData']['id'] }}" type="radio" value="{{ $size }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:bg-gray-700">
+                                                        {{-- <input type="radio" name="size" value="{{ $size }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:bg-gray-700"> --}}
                                                         <label class="w-full py-2 ml-2 text-sm font-medium text-gray-900">{{ $size }}</label>
                                                     </div>
 
@@ -127,7 +151,7 @@
                                             <div class="mt-2">
                                                 <label class="block mb-2 text-sm font-medium text-gray-900">Persoonlijke tekst</label>
                                                 <div class="flex items-center">
-                                                    <input type="text" name="customtext" placeholder="MOEDER GEVAAR" id="small-input" class="block w-64 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs mr-2">
+                                                    <input wire:model="currentProductView.customtext.{{ $product['productData']['id'] }}" type="text" name="customtext" placeholder="MOEDER GEVAAR" class="block w-64 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs mr-2">
                                                     <svg class="w-6 h-6 grow-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                                 </div>
                                             </div>
@@ -137,8 +161,8 @@
                                         <div class="mt-2">
                                             <label class="block mb-2 text-sm font-medium text-gray-900">Aantal</label>
                                             <div class="flex justify-between">
-                                                {{-- <input type="number" min="0" max="99" id="small-input" wire:model="productOrder.{{ $product['productData']['id'] }}.value.total" class="block w-24 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs"> --}}
-                                                <input type="number" name="total" min="0" max="99" id="small-input" class="block w-24 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs">
+                                                <input type="number" min="0" max="99" id="small-input" wire:model="currentProductView.total.{{ $product['productData']['id'] }}" class="block w-24 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs">
+                                                {{-- <input type="number" name="total" value="1" min="0" max="99" id="small-input" class="block w-24 p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs"> --}}
                                                 <div class="flex items-center">
                                                     <span class="text-l font-bold tracking-tight text-blue-700 block mr-2">€ {{ $product['productData']['price'] }},00/st.</span>
                                                     <button type="submit" class="text-indigo-900 bg-white border border-gray-300 hover:bg-gray-100 rounded-lg text-sm px-5 py-2.5">
@@ -175,49 +199,47 @@
                                         Naam
                                     </th>
                                     <th scope="col" class="px-6 py-3">
+                                        Persoonlijke tekst
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
                                         aantal
                                     </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        prijs
+                                    </th>
                                     <th scope="col" class="px-6 py-3 text-right">
-                                        Prijs
+                                        
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
 
-                                @foreach ($productOrder as $product)
-
-                                    @if($product['total'] !== 0)
-
-                                        <tr class="bg-white border-b">
-                                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                                {{ $product['productData']['name'] }}
-                                            </th>
-                                            <td class="px-6 py-4">
-                                                {{ $product['total'] }}
-                                            </td>
-                                            <td class="px-6 py-4 text-right">
-                                                € {{ $product['productData']['price'] * $product['total']}}
-                                            </td>
-                                        </tr>
-
-                                    @endif
-                                @endforeach
-
-                                {{-- <tr class="bg-white border-b">
+                            @foreach ($cart as $cartItem)
+                                <tr class="bg-white border-b">
                                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        {{ $cartItem->name }} ({{ $cartItem->options['color'].'/'.$cartItem->options['size'] }})
                                     </th>
                                     <td class="px-6 py-4">
+                                        {{ $cartItem->options['customtext'] }}
                                     </td>
-                                    <td class="px-6 py-4 text-right text-neutral-900">
-                                        <b>Totaal: € {{ $total }}</b>
+                                    <td class="px-6 py-4">
+                                        {{ $cartItem->qty }}
                                     </td>
-                                </tr> --}}
+                                    <td class="px-6 py-4">
+                                        € {{$cartItem->price * $cartItem->qty}}
+                                    </td>
+                                    <td class="py-4 text-right cursor-pointer text-red-800">
+                                        <button wire:click="removeFromCart('{{ $cartItem->rowId }}')"><svg class="w-6 h-6 grow-0" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M310.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L160 210.7 54.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L114.7 256 9.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 301.3 265.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L205.3 256 310.6 150.6z"/></svg></button>
+                                    </td>
+                                </tr>
+                            @endforeach
                                 
                                
                             </tbody>
                         </table>
 
-                        <div class="block grid grid-cols-1 mt-8">
+                        {{-- KORTINGEN --}}
+                        {{-- <div class="block grid grid-cols-1 mt-8">
 
                             <label for="website-admin" class="block mb-2 text-sm font-medium">Korting code</label>
                             <div class="flex">
@@ -268,7 +290,7 @@
 
                             @endif
 
-                        </div>
+                        </div> --}}
 
                         <div class="mt-8 flex justify-between">
                             <div></div>
@@ -289,7 +311,7 @@
                         <p>Uw bestelling is succesvol geregistreerd!<br/>Om uw bestelling te bevestigen: stort <b>€{{ $total }}</b> naar <span class="copy bg-blue-100 cursor-pointer" onclick="navigator.clipboard.writeText('{{ $iban }}')">{{ $iban }}</span> met mededeling: <span class="copy bg-blue-100 cursor-pointer" onclick="navigator.clipboard.writeText('{{ $paymentNotice }}')">{{ $paymentNotice }}</span></p>
 
                         <div class="p-4 mt-4 text-sm text-blue-700 bg-blue-100 rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
-                            <span class="font-bold">Opgelet!</span> Bestellingen moeten betaald zijn tegen <b>28 april 2022</b>. Indien we geen betaling hebben ontvangen word de bestelling niet bevestigd.
+                            <span class="font-bold">Opgelet!</span> Bestellingen moeten betaald zijn tegen <b>10 Februari 2023</b>. Indien we geen betaling hebben ontvangen word de bestelling niet bevestigd.
                         </div>
                     @endif
 

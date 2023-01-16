@@ -19,9 +19,7 @@ use App\Http\Controllers\OrderForm;
 
 Route::get('/', function () {
     return view('welcome');
-});
-
-Route::post('/', [OrderForm::class, 'action'])->name('orderForm.action');
+})->name('orderForm');
 
 Route::prefix('/admin')->group(function () {
 
