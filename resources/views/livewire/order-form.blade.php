@@ -142,11 +142,11 @@
                                             <!-- kleur -->
                                             <div class="mt-2">
                                                 <label class="block mb-2 text-sm font-medium text-gray-900">Kleur</label>
-                                                <div class="flex justify-start w-full font-medium text-left text-gray-500 mt-2">
+                                                <div class="grid place-content-start grid-cols-4 gap-2 w-full font-medium text-left text-gray-500 mt-2">
 
                                                     @foreach ($product['customise']->colors as $index => $color)
 
-                                                        <div class="flex items-center px-2 border border-gray-300 rounded mr-2" style="background-color:{{ $color->hexcolor }}">
+                                                        <div class="flex items-center px-2 border border-gray-300 rounded" style="background-color:{{ $color->hexcolor }}">
                                                             <input wire:model="currentProductView.color.{{ $product['productData']['id'] }}" type="radio" value="{{ $index }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:bg-gray-700">
                                                             {{-- <input type="radio" name="color" value="{{ $color->name }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:bg-gray-700"> --}}
                                                             <label class="w-full py-2 ml-2 text-sm font-medium">{{ $color->name }}</label>
@@ -160,11 +160,11 @@
                                             <!-- maat -->
                                             <div class="mt-2">
                                                 <label class="block mb-2 text-sm font-medium text-gray-900">Maat</label>
-                                                <div class="flex justify-start w-full font-medium text-left text-gray-500 mt-2">
+                                                <div class="grid place-content-start grid-cols-4 gap-2 w-full font-medium text-left text-gray-500 mt-2">
 
                                                     @foreach ($product['customise']->sizes as $size)
 
-                                                        <div class="flex items-center px-2 border border-gray-300 rounded mr-2">
+                                                        <div class="flex items-center px-2 border border-gray-300 rounded">
                                                             <input wire:model="currentProductView.size.{{ $product['productData']['id'] }}" type="radio" value="{{ $size }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:bg-gray-700">
                                                             {{-- <input type="radio" name="size" value="{{ $size }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:bg-gray-700"> --}}
                                                             <label class="w-full py-2 ml-2 text-sm font-medium text-gray-900">{{ $size }}</label>

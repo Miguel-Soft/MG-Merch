@@ -28,7 +28,7 @@ class OrderForm extends Component{
     public $telefoon;
 
 
-    public $page = 0;
+    public $page = 1;
     public $productOrder = [];
     public $total = 0;
     public $paymentNotice = 'Naam + Voornaam + MG Merch';
