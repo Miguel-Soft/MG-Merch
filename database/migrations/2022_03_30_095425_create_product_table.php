@@ -29,7 +29,7 @@ return new class extends Migration
 
             $table->string('name');
             $table->string('info');
-            $table->double('price', 4, 2);
+            $table->double('price', 5, 2);
             $table->json('photo');
             $table->boolean('custom_text');
             $table->boolean('show')->default(true);
