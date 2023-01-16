@@ -211,7 +211,7 @@ class OrderForm extends Component{
                 $orderProduct = new Order_product([
                     'order_id' => $order->id,
                     'product_id' => $cartItem['id'],
-                    'custom_text' => $cartItem['options']['customtext'],
+                    'custom_text' => $cartItem['options']['customtext'] ?? "",
                     'color' => $cartItem['options']['color'],
                     'size' => $cartItem['options']['size'],
                     'total' => $cartItem['qty']
