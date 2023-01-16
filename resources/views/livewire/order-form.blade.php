@@ -229,7 +229,7 @@
                                         Naam
                                     </th>
                                     <th scope="col" class="px-6 py-3">
-                                        Persoonlijke tekst
+                                        Tekst
                                     </th>
                                     <th scope="col" class="px-6 py-3">
                                         aantal
@@ -247,7 +247,7 @@
                             @foreach ($cart as $cartItem)
                                 <tr class="bg-white border-b">
                                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        {{ $cartItem->name }} ({{ $cartItem->options['color'].'/'.$cartItem->options['size'] }})
+                                        {{ $cartItem->name }} ({{ $productOrder[$cartItem->id]['customise']->colors[$cartItem->options['color']]->name.'/'.$cartItem->options['size'] }})
                                     </th>
                                     <td class="px-6 py-4">
                                         {{ $cartItem->options['customtext'] }}
@@ -258,10 +258,11 @@
                                     <td class="px-6 py-4">
                                         € {{$cartItem->price * $cartItem->qty}}
                                     </td>
-                                    <td class="py-4 text-right cursor-pointer text-red-800">
+                                    <td class="pr-6 py-4 text-right cursor-pointer">
                                         <button wire:click="removeFromCart('{{ $cartItem->rowId }}')"><svg class="w-6 h-6 grow-0" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M310.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L160 210.7 54.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L114.7 256 9.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 301.3 265.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L205.3 256 310.6 150.6z"/></svg></button>
                                     </td>
                                 </tr>
+
                             @endforeach
                                 
                                

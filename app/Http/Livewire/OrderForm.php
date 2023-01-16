@@ -28,7 +28,7 @@ class OrderForm extends Component{
     public $telefoon;
 
 
-    public $page = 1;
+    public $page = 0;
     public $productOrder = [];
     public $total = 0;
     public $paymentNotice = 'Naam + Voornaam + MG Merch';
@@ -212,7 +212,7 @@ class OrderForm extends Component{
                     'order_id' => $order->id,
                     'product_id' => $cartItem['id'],
                     'custom_text' => $cartItem['options']['customtext'] ?? "",
-                    'color' => $cartItem['options']['color'], // veranderen naar effectief kleur
+                    'color' => $this->productOrder[$cartItem['id']]['customise']['colors'][$cartItem['options']['color']]['name'], // veranderen naar effectief kleur
                     'size' => $cartItem['options']['size'],
                     'total' => $cartItem['qty']
                 ]);
